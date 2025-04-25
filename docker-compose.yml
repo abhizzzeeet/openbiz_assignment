@@ -32,6 +32,20 @@ services:
     networks:
       - udyam_network
 
+  # React Frontend
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: udyam-frontend
+    ports:
+      - "3000:80"  # React app served via nginx on port 80 inside container
+    depends_on:
+      - backend
+    networks:
+      - udyam_network
+
+
 volumes:
   postgres_data:
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { validateStep, handleFormSubmission, moveToNextStep } from "../controllers/FormController";
 const formSchema = require("../form_schema.json");
 
 const convertToReactAttributes = (attributes = {}) => {
@@ -39,30 +39,28 @@ const convertToReactAttributes = (attributes = {}) => {
   return reactAttributes;
 };
 
-
-const RenderField = ({ field, allFields, formValues, setFormValues, onSubmit }) => {
+const RenderField = ({ field, allFields, formValues, setFormValues, errors, onSubmit }) => {
   const Tag = field.tag;
   const props = convertToReactAttributes(field.attributes);
   const name = field.attributes?.name || field.attributes?.id;
+  const [selectedValue, setSelectedValue] = useState(null);
+
 
   const handleChange = (e) => {
     const value = e.target.value;
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
   const handleSelectChange = (e) => {
-    // Get the value of the selected option
     const selectedValue = e.target.value;
-    
-    // Find the option corresponding to the selected value
+    setSelectedValue(selectedValue);
     const selectedOption = allFields.find(
       (f) => f.tag === "option" && f.attributes.value === selectedValue
     );
-    
-    // Get the text of the selected option
+    console.log("selected option value: ", selectedOption)
     const selectedOptionText = selectedOption ? selectedOption.text : "";
-  
-    // Update the form values with the selected option text
+    console.log("selected option text: ", selectedOptionText)
     setFormValues((prev) => ({ ...prev, [name]: selectedOptionText }));
+    console.log("form Values: ", formValues)
   };
 
   if (Tag === "option") return null;
@@ -70,12 +68,11 @@ const RenderField = ({ field, allFields, formValues, setFormValues, onSubmit }) 
   const renderInputField = () => {
     if (Tag === "select") {
       const options = allFields.filter((f) => f.tag === "option");
-      console.log("options: ", options)
       return (
         <select
           {...props}
           onChange={handleSelectChange}
-          value={formValues[name] || ""}
+          value={selectedValue || ""}
           className="w-full border border-gray-300 rounded p-2"
         >
           {options.map((option, index) => (
@@ -116,69 +113,42 @@ const RenderField = ({ field, allFields, formValues, setFormValues, onSubmit }) 
 
   return (
     <div className="flex flex-col gap-1">
-      {field.label && <label className="font-medium text-sm">{field.label}</label>}
+      {field.label && <label className="font-medium text-sm !important">{field.label}</label>}
       {renderInputField()}
+      {errors && errors[name] && (
+        <span className="text-sm" style={{ color: "red" }}>
+          {errors[name]}
+        </span>
+      )}
     </div>
   );
 };
 
-
 export default function FormRenderer() {
   const [step, setStep] = useState("aadhaar_step");
   const [formValues, setFormValues] = useState({});
+  const [errors, setErrors] = useState({});
 
   const steps = ["aadhaar_step", "otp_step", "pan_verification"];
   const currentFields = formSchema[step].fields;
 
   const handleNextStep = async () => {
-    const inputs = currentFields.filter(f => f.tag === "input" || f.tag === "select");
-    const allFilled = inputs.every((input) => {
-      const name = input.attributes?.name || input.attributes?.id;
-      const type = input.attributes?.type;
-      const required = type !== "submit";
-      console.log("name: ", name," ,value: ", formValues[name] )
-      return !required || (formValues[name] && formValues[name].toString().trim() !== "");
-    });
+    const result = await validateStep(step, formValues, formSchema, steps);
 
-    if (!allFilled) {
-      alert("Please fill in all required fields.");
-      return;
-    }
-
-    const currentIndex = steps.indexOf(step);
-    if (currentIndex < steps.length - 1) {
-      setStep(steps[currentIndex + 1]);
-    } else {
-      // Submit to backend on last step
-      try {
-        // const response = await fetch("http://localhost:5000/api/submit", {
-          const response = await fetch("http://openbizassignment-production.up.railway.app", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            aadhaarNumber: formValues["ctl00$ContentPlaceHolder1$txtadharno"],  // update with actual name/id
-            aadhaarName: formValues["ctl00$ContentPlaceHolder1$txtownername"],                // same here
-            organisationType: formValues["ctl00$ContentPlaceHolder1$ddlTypeofOrg"],                  // etc.
-            panNumber: formValues["ctl00$ContentPlaceHolder1$txtPan"],
-            panName: formValues["ctl00$ContentPlaceHolder1$txtPanName"],
-            dob: formValues["ctl00$ContentPlaceHolder1$txtdob"],
-          }),
-        });
-        const data = await response.json();
-        alert(data.message);
-      } catch (err) {
-        console.error("Submission error:", err);
-        alert("Failed to submit form.");
+    if (result) {
+      if (result.success) {
+        moveToNextStep(step, steps, setStep, formValues);
+      } else {
+        setErrors(result.errors || {});
       }
     }
   };
 
   return (
-    
     <div className="p-4 sm:p-6 md:p-10 max-w-2xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-6 capitalize text-center">{step.replace("_", " ")}</h2>
+      <h2 className="text-2xl font-semibold mb-6 capitalize text-center">
+        {step.replace("_", " ")}
+      </h2>
       <form className="space-y-6 bg-white shadow-md rounded px-6 py-8 sm:p-10">
         {currentFields.map((field, index) => (
           <RenderField
@@ -187,11 +157,11 @@ export default function FormRenderer() {
             allFields={currentFields}
             formValues={formValues}
             setFormValues={setFormValues}
+            errors={errors}
             onSubmit={handleNextStep}
           />
         ))}
       </form>
     </div>
-
   );
 }
