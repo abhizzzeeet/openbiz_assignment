@@ -22,7 +22,9 @@ export const validateStep = async (step, formValues, formSchema, steps) => {
     });
   
     try {
-      const response = await fetch("http://localhost:5000/api/validate-step", {
+      // const response = await fetch("http://localhost:5000/api/validate-step", {
+        const response = await fetch("http://openbizassignment-production.up.railway.app/api/validate-step", {
+        
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,14 +44,15 @@ export const validateStep = async (step, formValues, formSchema, steps) => {
       }
     } catch (err) {
       console.error("Error validating step:", err);
-      alert("Failed to validate step.");
+      alert("Failed to validate step.");  
       return null;
     }
   };
   
   export const handleFormSubmission = async (formValues) => {
     try {
-      const response = await fetch("http://localhost:5000/api/submit", {
+      // const response = await fetch("http://localhost:5000/api/submit", {
+        const response = await fetch("http://openbizassignment-production.up.railway.app/api/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
