@@ -48,16 +48,6 @@
       {
         "tag": "input",
         "attributes": {
-          "id": "ctl00_ContentPlaceHolder1_chkDecarationA",
-          "type": "checkbox",
-          "name": "ctl00$ContentPlaceHolder1$chkDecarationA",
-          "checked": "checked",
-          "tabindex": "3"
-        }
-      },
-      {
-        "tag": "input",
-        "attributes": {
           "type": "submit",
           "name": "ctl00$ContentPlaceHolder1$btnValidateAadhaar",
           "value": "Validate & Generate OTP",
@@ -91,6 +81,20 @@
           ],
           "autocomplete": "Off",
           "placeholder": "OTP code"
+        }
+      },
+      {
+        "tag": "input",
+        "attributes": {
+          "type": "submit",
+          "name": "ctl00$ContentPlaceHolder1$btnValidate",
+          "value": "Validate",
+          "onclick": "javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(\"ctl00$ContentPlaceHolder1$btnValidate\", \"\", true, \"V\", \"\", false, false))",
+          "id": "ctl00_ContentPlaceHolder1_btnValidate",
+          "class": [
+            "btn",
+            "btn-primary"
+          ]
         }
       }
     ]
@@ -203,45 +207,6 @@
       },
       {
         "tag": "label",
-        "attributes": {},
-        "text": "4. Do you have PAN?"
-      },
-      {
-        "tag": "input",
-        "attributes": {
-          "id": "ctl00_ContentPlaceHolder1_rbpanyesno_0",
-          "type": "radio",
-          "name": "ctl00$ContentPlaceHolder1$rbpanyesno",
-          "value": "1",
-          "checked": "checked"
-        }
-      },
-      {
-        "tag": "label",
-        "attributes": {
-          "for": "ctl00_ContentPlaceHolder1_rbpanyesno_0"
-        },
-        "text": "Yes"
-      },
-      {
-        "tag": "input",
-        "attributes": {
-          "id": "ctl00_ContentPlaceHolder1_rbpanyesno_1",
-          "type": "radio",
-          "name": "ctl00$ContentPlaceHolder1$rbpanyesno",
-          "value": "2",
-          "onclick": "javascript:setTimeout('__doPostBack(\\'ctl00$ContentPlaceHolder1$rbpanyesno$1\\',\\'\\')', 0)"
-        }
-      },
-      {
-        "tag": "label",
-        "attributes": {
-          "for": "ctl00_ContentPlaceHolder1_rbpanyesno_1"
-        },
-        "text": "No"
-      },
-      {
-        "tag": "label",
         "attributes": {
           "for": "pancard"
         },
@@ -302,51 +267,6 @@
           "onchange": "return calc_dateDob(this.id);",
           "autocomplete": "Off",
           "placeholder": "DD/MM/YYYY"
-        }
-      },
-      {
-        "tag": "label",
-        "attributes": {},
-        "text": "4.1.3 Do You Have DOB or DOI as per PAN/क्या आपके पास पैन के अनुसार जन्मतिथि या निगमन की तारीख है?"
-      },
-      {
-        "tag": "input",
-        "attributes": {
-          "id": "ctl00_ContentPlaceHolder1_rbdDOB_0",
-          "type": "radio",
-          "name": "ctl00$ContentPlaceHolder1$rbdDOB",
-          "value": "1"
-        }
-      },
-      {
-        "tag": "label",
-        "attributes": {
-          "for": "ctl00_ContentPlaceHolder1_rbdDOB_0"
-        },
-        "text": "DOB"
-      },
-      {
-        "tag": "input",
-        "attributes": {
-          "id": "ctl00_ContentPlaceHolder1_rbdDOB_1",
-          "type": "radio",
-          "name": "ctl00$ContentPlaceHolder1$rbdDOB",
-          "value": "2"
-        }
-      },
-      {
-        "tag": "label",
-        "attributes": {
-          "for": "ctl00_ContentPlaceHolder1_rbdDOB_1"
-        },
-        "text": "DOI"
-      },
-      {
-        "tag": "input",
-        "attributes": {
-          "id": "ctl00_ContentPlaceHolder1_chkDecarationP",
-          "type": "checkbox",
-          "name": "ctl00$ContentPlaceHolder1$chkDecarationP"
         }
       },
       {

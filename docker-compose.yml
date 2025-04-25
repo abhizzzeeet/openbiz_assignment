@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # Node.js Backend
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: udyam-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/openbiz_assignment
+    depends_on:
+      - db
+    command: ["sh", "-c", "npx prisma migrate deploy && node server.js"]
+    networks:
+      - udyam_network
+
+  # PostgreSQL Database
+  db:
+    image: postgres:13
+    container_name: udyam-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: openbiz_assignment
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - udyam_network
+
+volumes:
+  postgres_data:
+
+networks:
+  udyam_network:
+    driver: bridge
