@@ -152,7 +152,7 @@ export default function FormRenderer() {
       // Submit to backend on last step
       try {
         // const response = await fetch("http://localhost:5000/api/submit", {
-          const response = await fetch("https://openbizassignment-production.up.railway.app", {
+          const response = await fetch("http://openbizassignment-production.up.railway.app", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
