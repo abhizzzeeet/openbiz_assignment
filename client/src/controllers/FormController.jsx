@@ -23,7 +23,7 @@ export const validateStep = async (step, formValues, formSchema, steps) => {
   
     try {
       // const response = await fetch("http://localhost:5000/api/validate-step", {
-        const response = await fetch("http://openbizassignment-production.up.railway.app/api/validate-step", {
+        const response = await fetch("https://openbizassignment-production.up.railway.app/api/validate-step", {
         
         method: "POST",
         headers: {
@@ -52,7 +52,7 @@ export const validateStep = async (step, formValues, formSchema, steps) => {
   export const handleFormSubmission = async (formValues) => {
     try {
       // const response = await fetch("http://localhost:5000/api/submit", {
-        const response = await fetch("http://openbizassignment-production.up.railway.app/api/submit", {
+        const response = await fetch("https://openbizassignment-production.up.railway.app/api/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
