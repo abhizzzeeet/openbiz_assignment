@@ -57,6 +57,8 @@ https://github.com/user-attachments/assets/bbda481b-ae30-45f0-81fb-75823dcfea28
 ### the red texts is due to Database Error which was intentionally created to check backend code respone on database failure while submiting into db
 
 
+[View JSON Schema](scraper/output/form_schema.json)
+
 
    
 
