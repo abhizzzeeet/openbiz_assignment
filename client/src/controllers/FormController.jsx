@@ -1,4 +1,7 @@
+import constants from "../config/constants";
+
 // form_controller.js
+const { API_BASE_URL_PROD, API_BASE_URL_LOCAL, ROUTES} = constants
 
 export const validateStep = async (step, formValues, formSchema, steps) => {
     const currentFields = formSchema[step].fields;
@@ -22,8 +25,7 @@ export const validateStep = async (step, formValues, formSchema, steps) => {
     });
   
     try {
-      // const response = await fetch("http://localhost:5000/api/validate-step", {
-        const response = await fetch("https://openbizassignment-production.up.railway.app/api/validate-step", {
+        const response = await fetch(`${API_BASE_URL_PROD}${ROUTES.VALIDATE_STEP}`, {
         
         method: "POST",
         headers: {
@@ -51,8 +53,7 @@ export const validateStep = async (step, formValues, formSchema, steps) => {
   
   export const handleFormSubmission = async (formValues) => {
     try {
-      // const response = await fetch("http://localhost:5000/api/submit", {
-        const response = await fetch("https://openbizassignment-production.up.railway.app/api/submit", {
+        const response = await fetch(`${API_BASE_URL_PROD}${ROUTES.SUBMIT_FORM}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

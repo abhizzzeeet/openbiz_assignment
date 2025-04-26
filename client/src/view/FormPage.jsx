@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { validateStep, handleFormSubmission, moveToNextStep } from "../controllers/FormController";
-const formSchema = require("../form_schema.json");
+import "../assets/styles.css"
+const formSchema = require("../config/form_schema.json");
 
 const convertToReactAttributes = (attributes = {}) => {
   const reactAttributes = {};
@@ -45,7 +46,6 @@ const RenderField = ({ field, allFields, formValues, setFormValues, errors, onSu
   const name = field.attributes?.name || field.attributes?.id;
   const [selectedValue, setSelectedValue] = useState(null);
 
-
   const handleChange = (e) => {
     const value = e.target.value;
     setFormValues((prev) => ({ ...prev, [name]: value }));
@@ -56,11 +56,8 @@ const RenderField = ({ field, allFields, formValues, setFormValues, errors, onSu
     const selectedOption = allFields.find(
       (f) => f.tag === "option" && f.attributes.value === selectedValue
     );
-    console.log("selected option value: ", selectedOption)
     const selectedOptionText = selectedOption ? selectedOption.text : "";
-    console.log("selected option text: ", selectedOptionText)
     setFormValues((prev) => ({ ...prev, [name]: selectedOptionText }));
-    console.log("form Values: ", formValues)
   };
 
   if (Tag === "option") return null;
@@ -73,7 +70,7 @@ const RenderField = ({ field, allFields, formValues, setFormValues, errors, onSu
           {...props}
           onChange={handleSelectChange}
           value={selectedValue || ""}
-          className="w-full border border-gray-300 rounded p-2"
+          className="input-field"
         >
           {options.map((option, index) => (
             <option key={index} {...convertToReactAttributes(option.attributes)}>
@@ -93,7 +90,7 @@ const RenderField = ({ field, allFields, formValues, setFormValues, errors, onSu
               e.preventDefault();
               onSubmit();
             }}
-            className="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700"
+            className="submit-btn"
           />
         );
       }
@@ -103,7 +100,7 @@ const RenderField = ({ field, allFields, formValues, setFormValues, errors, onSu
           {...props}
           value={formValues[name] || ""}
           onChange={handleChange}
-          className="w-full border border-gray-300 rounded p-2"
+          className="input-field"
         />
       );
     }
@@ -112,11 +109,11 @@ const RenderField = ({ field, allFields, formValues, setFormValues, errors, onSu
   };
 
   return (
-    <div className="flex flex-col gap-1">
-      {field.label && <label className="font-medium text-sm !important">{field.label}</label>}
+    <div className="form-group">
+      {field.label && <label>{field.label}</label>}
       {renderInputField()}
       {errors && errors[name] && (
-        <span className="text-sm" style={{ color: "red" }}>
+        <span className="error">
           {errors[name]}
         </span>
       )}
@@ -145,11 +142,9 @@ export default function FormRenderer() {
   };
 
   return (
-    <div className="p-4 sm:p-6 md:p-10 max-w-2xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-6 capitalize text-center">
-        {step.replace("_", " ")}
-      </h2>
-      <form className="space-y-6 bg-white shadow-md rounded px-6 py-8 sm:p-10">
+    <div className="form-container">
+      <h2>{step.replace("_", " ")}</h2>
+      <form className="form">
         {currentFields.map((field, index) => (
           <RenderField
             key={index}
@@ -165,3 +160,4 @@ export default function FormRenderer() {
     </div>
   );
 }
+
